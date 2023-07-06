@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/counter_provider.dart';
+import '../provider/slider_provider.dart';
+
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -12,25 +14,44 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title:const  Text("Provider Counter"),
       ),
-      body: Center(
-        /// here we are using the  Consumer widget that comes with provider package
-        /// to update only widget that place inside it
-        /// here we are assiging  the Consumer to it provider type
-        child: Consumer<CounterProvider>(
-          builder: (BuildContext context, value, Widget? child) {
-            /// we can acess all aspects of CounterProvider by this (value)
-            return  Text(value.count.toString(),style: const TextStyle(fontSize: 50,fontWeight: FontWeight.bold),);
-          },
+      body:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          /// here we are Creating the  Consumer of class SliderProvider to manage its state
+        Consumer<SliderProvider>(builder: (builder,provider,child){
 
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: (){
-          ///here we are calling the updatecount method of class CounterProvider and we also set listen to false to prevent any build time error
-          Provider.of<CounterProvider>(context,listen: false).updatecount();
-        },
-      ),
+          return Slider(value:provider.value, onChanged: (val){
+            provider.setslidervalue(val);
+          });
+        }),
+          /// here we are Creating the  Consumer of class SliderProvider to manage its state
+          Consumer<SliderProvider>(builder: (builder,provider,child){
+            /// we can acesss the  SliderProvider with this provider variable
+            return Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 100,
+                  color: Colors.red.withOpacity(provider.value),
+
+                ),
+
+              ),
+              Expanded(
+                child: Container(
+                  height: 100,
+                  color: Colors.green.withOpacity(provider.value),
+
+                ),
+
+              ),
+            ],
+
+            );
+          }),
+        ],
+      )
+
     );
   }
 }
