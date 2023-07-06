@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_provider_overview/provider/addfavourite_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/slider_provider.dart';
+import 'favorite_screen.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -12,45 +13,33 @@ class HomeScreen extends StatelessWidget {
     print("Build");
     return Scaffold(
       appBar: AppBar(
-        title:const  Text("Provider Counter"),
+        title:const  Text("Provider Add To Fav"),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FavouriteScreen()));
+
+          }, icon: const Icon(Icons.favorite))
+        ],
       ),
-      body:Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          /// here we are Creating the  Consumer of class SliderProvider to manage its state
-        Consumer<SliderProvider>(builder: (builder,provider,child){
+      body:ListView.builder(
+        itemCount:  100,
+          itemBuilder: (context,index){
+        return Consumer<AddToFavouriteProvider>(
+          builder: (context,provider,child) {
 
-          return Slider(value:provider.value, onChanged: (val){
-            provider.setslidervalue(val);
-          });
-        }),
-          /// here we are Creating the  Consumer of class SliderProvider to manage its state
-          Consumer<SliderProvider>(builder: (builder,provider,child){
-            /// we can acesss the  SliderProvider with this provider variable
-            return Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 100,
-                  color: Colors.red.withOpacity(provider.value),
+            return ListTile(
+              onTap: () {
 
-                ),
+                provider.addtofav(index);
 
-              ),
-              Expanded(
-                child: Container(
-                  height: 100,
-                  color: Colors.green.withOpacity(provider.value),
-
-                ),
-
-              ),
-            ],
+              },
+              title: Text("Item $index"),
+              trailing:provider.selectedItems.contains(index)?const Icon(Icons.favorite,color: Colors.red,): const Icon(Icons.favorite_border_outlined),
 
             );
-          }),
-        ],
-      )
+          }
+        );
+      })
 
     );
   }
