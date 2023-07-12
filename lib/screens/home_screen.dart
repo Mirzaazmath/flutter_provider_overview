@@ -1,46 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_provider_overview/provider/addfavourite_provider.dart';
-import 'package:provider/provider.dart';
-
-import 'favorite_screen.dart';
-
-
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+   HomeScreen({super.key});
+/// here we are using the ValueNotifier to avoid boiler plate code
+   /// it works same
+ final ValueNotifier<int>_counter= ValueNotifier<int>(0);
+ /// we assign value 0 at the time of it's initailization
+   /// and also we create ValueNotifier of type int because we are creating the counter app with ValueNotifier
 
   @override
   Widget build(BuildContext context) {
+    /// checking how many time we build the ui
     print("Build");
     return Scaffold(
       appBar: AppBar(
-        title:const  Text("Provider Add To Fav"),
-        actions: [
-          IconButton(onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FavouriteScreen()));
-
-          }, icon: const Icon(Icons.favorite))
-        ],
+        elevation: 0,
+        title:const  Text("Provider with ValueNotifer"),
       ),
-      body:ListView.builder(
-        itemCount:  100,
-          itemBuilder: (context,index){
-        return Consumer<AddToFavouriteProvider>(
-          builder: (context,provider,child) {
+      body: Center(
+        /// to access the ValueNotifier we need to use ValueListenableBuilder it is same as consumer
+        child:ValueListenableBuilder(
+          /// here we are defining the ValueNotifier _counter to valueListenable to listen the changes
+            valueListenable: _counter,
+            /// builder builds the ui is the change occur
+            /// context ,value , child
+            builder: (context,value,child){
+              /// here we can access our counter using
+              return Text(value.toString(),style:const  TextStyle(fontWeight: FontWeight.bold,fontSize: 50),);
+        }),
 
-            return ListTile(
-              onTap: () {
+      ),
+      floatingActionButton: FloatingActionButton(
 
-                provider.addtofav(index);
-
-              },
-              title: Text("Item $index"),
-              trailing:provider.selectedItems.contains(index)?const Icon(Icons.favorite,color: Colors.red,): const Icon(Icons.favorite_border_outlined),
-
-            );
-          }
-        );
-      })
-
+        onPressed: (){
+          /// increasing the counter value
+          _counter.value++;
+          print(_counter.value);
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
