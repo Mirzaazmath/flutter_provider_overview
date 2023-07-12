@@ -8,7 +8,7 @@ A new Flutter project.
 # Result 
 
 
-<img src="https://github.com/Mirzaazmath/flutter_provider_overview/blob/main/assets/result.gif" height="400">
+<img src="https://github.com/Mirzaazmath/flutter_provider_overview/blob/ProviderWithValueNotifier/assets/result.gif" height="400">
 
 This project is a starting point for a Flutter application.
 
